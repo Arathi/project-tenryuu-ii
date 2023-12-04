@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import {computed, onMounted, ref} from 'vue';
+
+import Category from './Category.vue';
+import Actress from './Actress.vue';
+
 import Color from '../domains/Color';
 import Movie from '../domains/Movie';
 import Tag from '../domains/Tag';
@@ -38,30 +42,61 @@ onMounted(() => {
           break;
         case "導演:":
           link = header.nextElementSibling as HTMLLinkElement|null;
-          idx = link.href.lastIndexOf("/");
-          dts.director = {
-            name: link.textContent,
-            value: link.href.substring(idx+1),
-          };
+          if (link != null) {
+            idx = link.href.lastIndexOf("/");
+            dts.director = {
+              name: link.textContent != null ? link.textContent : "",
+              value: link.href.substring(idx+1),
+            };
+          }
           break;
         case "製作商:":
           link = header.nextElementSibling as HTMLLinkElement|null;
-          idx = link.href.lastIndexOf("/");
-          dts.studio = {
-            name: link.textContent,
-            value: link.href.substring(idx+1),
-          };
+          if (link != null) {
+            idx = link.href.lastIndexOf("/");
+            dts.studio = {
+              name: link.textContent != null ? link.textContent : "",
+              value: link.href.substring(idx+1),
+            };
+          }
           break;
         case "發行商:":
           link = header.nextElementSibling as HTMLLinkElement|null;
-          idx = link.href.lastIndexOf("/");
-          dts.publisher = {
-            name: link.textContent,
-            value: link.href.substring(idx+1),
-          };
+          if (link != null) {
+            idx = link.href.lastIndexOf("/");
+            dts.publisher = {
+              name: link.textContent != null ? link.textContent : "",
+              value: link.href.substring(idx+1),
+            };
+          }
           break;
       }
     }
+
+    dts.categories = [];
+    const categoryNodes: NodeListOf<HTMLInputElement> = dom.querySelectorAll(".info input[name='gr_sel']");
+    categoryNodes.forEach((cat) => {
+      const a = cat.nextElementSibling as HTMLLinkElement|null;
+      if (a != null) {
+        dts.categories.push({
+          name: a.innerText,
+          value: cat.value,
+        });
+      }
+    });
+
+    dts.actresses = [];
+    const actressNodes: NodeListOf<HTMLLinkElement> = dom.querySelectorAll("span.genre[onmouseover] > a");
+    actressNodes.forEach((act) => {
+      const href = act.href;
+      const idx = href.lastIndexOf("/");
+      const value = href.substring(idx+1);
+      dts.actresses.push({
+        name: act.innerText,
+        value: value,
+      });
+    });
+
     details.value = dts;
   });
 });
@@ -115,11 +150,21 @@ const coverFilter = computed(() => {
               </a>
             </div>
           </div>
-          <div class="categories">
+          <div class="label-container">
             <span>分类：</span>
+            <div class="labels">
+              <category v-for="category in details.categories"
+                :category="category"
+              />
+            </div>
           </div>
-          <div class="actresses">
+          <div class="label-container">
             <span>演员：</span>
+            <div class="labels">
+              <actress v-for="actress in details.actresses"
+                :actress="actress"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -128,7 +173,7 @@ const coverFilter = computed(() => {
         <div class="tag" v-for="tag in tags" :key="tag.title">
           <button
             :class="tag.classNames"
-            disabled="disabled"
+            disabled="true"
             :title="tag.description"
           >
             {{tag.title}}
@@ -187,6 +232,20 @@ const coverFilter = computed(() => {
 
           .property {
             margin-right: 32px;
+          }
+        }
+
+        .label-container {
+          display: flex;
+          flex-direction: column;
+
+          .labels {
+            display: flex;
+            flex-direction: row;
+
+            * {
+              margin-right: 4px;
+            }
           }
         }
       }

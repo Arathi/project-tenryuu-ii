@@ -66,6 +66,16 @@ onMounted(() => {
   if (waterfall != null) {
     waterfall.hidden = true;
   }
+
+  const pagination: HTMLElement|null = document.querySelector(".pagination");
+  if (pagination != null && pagination.parentElement != null) {
+    pagination.parentElement.hidden = true
+  }
+
+  const footer: HTMLElement|null = document.querySelector("footer.footer");
+  if (footer != null) {
+    footer.hidden = true;
+  }
 });
 </script>
 

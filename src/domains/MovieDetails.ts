@@ -9,13 +9,13 @@ export default interface MovieDetails {
   actresses: Actress[];
 }
 
-interface Label {
+export interface Label {
   name: string;
   value: string;
 }
 
-interface Actress {
+export interface Actress {
   name: string;
   value: string;
-  avatar: string;
+  avatar?: string;
 }
