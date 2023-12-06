@@ -2,6 +2,7 @@
 import {onBeforeMount, onMounted, ref} from 'vue';
 import Waterfall from './components/Waterfall.vue';
 import MovieList from './components/MovieList.vue';
+import Settings from './components/Settings.vue';
 import Movie from './domains/Movie';
 import Tag from './domains/Tag';
 
@@ -80,8 +81,13 @@ onMounted(() => {
 </script>
 
 <template>
-  <waterfall :movies="movies" v-if="type == Type.Waterfall" />
-  <movie-list :movies="movies" v-if="type == Type.MovieList" />
+  <Teleport to="#navbar">
+    <settings />
+  </Teleport>
+  <Teleport to=".container-fluid > div.row > div#waterfall.masonry">
+    <waterfall :movies="movies" v-if="type == Type.Waterfall" />
+    <movie-list :movies="movies" v-if="type == Type.MovieList" />
+  </Teleport>
 </template>
 
 <style scoped lang="less">

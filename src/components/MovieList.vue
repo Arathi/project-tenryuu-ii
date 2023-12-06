@@ -8,7 +8,7 @@ const props = defineProps<{
 }>();
 
 const width = ref(window.innerWidth);
-const widthPx = computed(() => `${width.value-50}px`);
+const widthPx = computed(() => `${width.value-37}px`);
 
 onMounted(() => {
   window.onresize = () => {
@@ -32,7 +32,7 @@ onMounted(() => {
 .movie-list {
   display: flex;
   flex-direction: column;
-  width: v-bind(widthPx);
-  margin: 16px;
+  // width: v-bind(widthPx);
+  // margin: 0 30px 0 20px;
 }
 </style>

@@ -188,8 +188,9 @@ const coverFilter = computed(() => {
 .movie-view {
   display: flex;
   flex-direction: row;
+  flex: 1;
 
-  width: 100%;
+  // margin-left: 20px;
   margin-bottom: 8px;
 
   .movie-cover {
